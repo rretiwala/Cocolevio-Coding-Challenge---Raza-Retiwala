@@ -1,5 +1,6 @@
 # Finds optimal profit given a selection of fabric buyers
 
+# Code adapted from https://www.geeksforgeeks.org/knapsack-problem/
 
 def createLists(infile):
 
@@ -43,49 +44,38 @@ def backTrack(K, buying):
     end = len(K[0])-1
     indexes = []
 
-    for item in K:
-        print (item)
 
     while K[n][end] != 0:
         if K[n][end] != K[n-1][end]:
-            print (buying)
             end -= buying[n-1]
-            indexes.append(n)
+            indexes.append(n-1)
 
         n-=1
-        print(n, end)
-        print()
-
 
     return indexes
 
 
 def main():
 
-    # # Takes in the file
-    # infile = open('Input.txt', 'r')
-    # # Convert the file input into a dictionary of information
-    # companies, buying, prices = createLists(infile)
-    #
-    # # Prompt user for amount available to sell
+    # Takes in the file
+    infile = open('Input.txt', 'r')
+    # Convert the file input into a dictionary of information
+    companies, buying, prices = createLists(infile)
+
+    # Prompt user for amount available to sell
 
     while True:
 
         available = int(input("How much material are you selling?: "))
-        # print(companies)
-        # print(buying)
-        # print(prices)
-
-        prices = [1, 4, 5, 7]
-        buying = [1, 3, 4, 5]
-
 
         matrix = createMatrix(available, buying, prices, len(buying))
         maxPrice = matrix[-1][-1]
         indexes = backTrack(matrix, buying)
+        for item in reversed(indexes):
+            print ("Company", companies[item], "will pay", prices[item], "and purchase", buying[item])
 
         print ('The max price is', maxPrice)
-        print(indexes)
+
 
 
 main()
