@@ -19,15 +19,9 @@ def createLists(infile):
     return companies, buying, prices
 
 
-def findMax(available, needed, prices, n):
-    K = []
-    for i in range(n+1):
-        K.append([])
-        for l in range(available + 1):
-            K[i].append(0)
+def createMatrix(available, needed, prices, n):
+    K = [[0 for x in range(available + 1)] for x in range(n + 1)]
 
-    for item in K:
-        print(item)
 
     # Build table K[][] in bottom up manner
     for i in range(n + 1):
@@ -41,24 +35,57 @@ def findMax(available, needed, prices, n):
             else:
                 K[i][w] = K[i - 1][w]
 
-    return K[n][available]
+    return K
+
+
+def backTrack(K, buying):
+    n = len(K)-1
+    end = len(K[0])-1
+    indexes = []
+
+    for item in K:
+        print (item)
+
+    while K[n][end] != 0:
+        if K[n][end] != K[n-1][end]:
+            print (buying)
+            end -= buying[n-1]
+            indexes.append(n)
+
+        n-=1
+        print(n, end)
+        print()
+
+
+    return indexes
 
 
 def main():
 
-    # Takes in the file
-    infile = open('Input.txt', 'r')
-    # Convert the file input into a dictionary of information
-    companies, buying, prices = createLists(infile)
+    # # Takes in the file
+    # infile = open('Input.txt', 'r')
+    # # Convert the file input into a dictionary of information
+    # companies, buying, prices = createLists(infile)
+    #
+    # # Prompt user for amount available to sell
 
-    # Prompt user for amount available to sell
-    available = int(input("How much material are you selling?: "))
-    print(companies)
-    print(buying)
-    print(prices)
+    while True:
 
-    maxPrice = findMax(available, buying, prices, len(companies))
+        available = int(input("How much material are you selling?: "))
+        # print(companies)
+        # print(buying)
+        # print(prices)
 
-    print(maxPrice)
+        prices = [1, 4, 5, 7]
+        buying = [1, 3, 4, 5]
+
+
+        matrix = createMatrix(available, buying, prices, len(buying))
+        maxPrice = matrix[-1][-1]
+        indexes = backTrack(matrix, buying)
+
+        print ('The max price is', maxPrice)
+        print(indexes)
+
 
 main()
