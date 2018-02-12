@@ -25,12 +25,22 @@ def createMatrix(available, needed, prices, n):
 
 
     # Build table K[][] in bottom up manner
+    # Finds the ideal solution for every weight given remaining fabric
+    # limit       0 1 2 3 4 5 6 7
+    # val, weight
+    # 1    1      0|1|1|1|1|1|1|1|
+    # 4    3      0|1|1|4|5|5|5|5|
+    # 5    4      0|1|1|4|5|6|6|9|
+    # 7    5      0|1|1|4|5|7|8|9|
+    
     for i in range(n + 1):
         for w in range(available + 1):
             if i == 0 or w == 0:
                 K[i][w] = 0
-
+               
+            #If the needed weights for a company are less than or equal the index, find the max
             elif needed[i - 1] <= w:
+                #Compares the profit with using a particular weight vs. the ideal profit without using that specific 
                 K[i][w] = max(prices[i - 1] + K[i - 1][w - needed[i - 1]], K[i - 1][w])
 
             else:
